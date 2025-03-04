@@ -12,12 +12,14 @@ import domain.Estudiante;
 import domain.GestorEstudiantes;
 
 public class AppPrincipal extends javax.swing.JFrame {
-
     /**
-     * Creates new form AppPrincipal
+     * Este gestor almacenará los estudiantes creados con la APP
      */
     private GestorEstudiantes gestor;
-
+    /**
+     * Inicializamos el gestor, creamos la ventana en el centro de la pantalla,
+     * e inicializamos los componentes de la UI
+     */
     public AppPrincipal() {
         this.gestor = new GestorEstudiantes();
         this.setLocationRelativeTo(null);
@@ -173,56 +175,34 @@ public class AppPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField3ActionPerformed
 
-    
-    /***
-     * Se usa un StringBuilder para formatear la informacion del estudiante
-     * como su nombre, edad y a nota.
-     * @return Una cadena con la información de los estudiantes formateada
-     */
-    private String formatearListaEstudiantes(){
-        if(this.gestor.obtenerListaEstudiantes().isEmpty()){
-            return "NO HAY ESTUDIANTES EN LA LISTA, POR FAVOR AGREGUE UNO";
-        }
-        StringBuilder sb = new StringBuilder();
-        for(Estudiante e : gestor.obtenerListaEstudiantes()){
-            sb.append("NOMBRE: ");
-            sb.append(e.getNombre()).append(" ");
-            sb.append("EDAD: ");
-            sb.append(e.getEdad()).append(" ");
-            sb.append("NOTA: ");
-            sb.append(e.getNota()).append('\n');
-        }
-        return sb.toString();
-    }
     /***
      * Con este metodo manejamos el evento cuando el botón es presionado.
      * En este metodo, casteamos la informacion recibida en los campos de texto
-     * y la guardamos en el gestor de estudiantes.
+     * y la guardamos en el gestor de estudiantes, mediante el metodo agregarEstudiante().
+     * Luego, formateamos la info en una cadena, y actualizamos el texto en el textArea1
      * @param evt 
      */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        Estudiante estudiante = new Estudiante();
-        estudiante.setNombre(this.jTextField1.getText());
+        String nombre = jTextField1.getText();
         int edad = 0;
         double nota = 0;
-        try {
-            nota = Double.parseDouble(this.jTextField3.getText());
+        try{
             edad = Integer.parseInt(this.jTextField2.getText());
-        } catch (Exception e) {
-            this.jLabel5.setText("ERROR, POR FAVOR INGRESE UN VALOR NUMERICO");
+            nota = Double.parseDouble(this.jTextField3.getText());
+        }catch(Exception e){
+            this.jLabel5.setText("VALORES INVALIDOS");
             return;
         }
-        if(nota < 0 || nota > 5){
-            this.jLabel5.setText("ERROR, INGRESE UNA NOTA ENTRE 0 Y 5");
+        try{
+            this.gestor.agregarEstudiante(nombre, edad, nota);
+        }catch(Exception e){
+            this.jLabel5.setText(e.getMessage());
             return;
         }
-        estudiante.setEdad(edad);
-        estudiante.setNota(nota);
-        gestor.agregarEstudiante(estudiante);
         this.jLabel5.setText(null);
         this.jTextArea1.setText(null);
-        this.jTextArea1.setText(this.formatearListaEstudiantes());
+        this.jTextArea1.setText(this.gestor.formatearListaEstudiantes());
         this.jLabel7.setText(Double.toString(gestor.calcularPromedioNotas()));
 
     }//GEN-LAST:event_jButton1ActionPerformed
