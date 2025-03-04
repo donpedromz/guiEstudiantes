@@ -8,8 +8,7 @@ package UI;
  *
  * @author Juan Pablo
  */
-import domain.Estudiante;
-import java.util.HashSet;
+import domain.Estudiante;  
 import domain.GestorEstudiantes;
 
 public class AppPrincipal extends javax.swing.JFrame {
@@ -174,6 +173,12 @@ public class AppPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField3ActionPerformed
 
+    
+    /***
+     * Se usa un StringBuilder para formatear la informacion del estudiante
+     * como su nombre, edad y a nota.
+     * @return Una cadena con la información de los estudiantes formateada
+     */
     private String formatearListaEstudiantes(){
         if(this.gestor.obtenerListaEstudiantes().isEmpty()){
             return "NO HAY ESTUDIANTES EN LA LISTA, POR FAVOR AGREGUE UNO";
@@ -189,6 +194,12 @@ public class AppPrincipal extends javax.swing.JFrame {
         }
         return sb.toString();
     }
+    /***
+     * Con este metodo manejamos el evento cuando el botón es presionado.
+     * En este metodo, casteamos la informacion recibida en los campos de texto
+     * y la guardamos en el gestor de estudiantes.
+     * @param evt 
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
         Estudiante estudiante = new Estudiante();
@@ -200,6 +211,11 @@ public class AppPrincipal extends javax.swing.JFrame {
             edad = Integer.parseInt(this.jTextField2.getText());
         } catch (Exception e) {
             this.jLabel5.setText("ERROR, POR FAVOR INGRESE UN VALOR NUMERICO");
+            return;
+        }
+        if(nota < 0 || nota > 5){
+            this.jLabel5.setText("ERROR, INGRESE UNA NOTA ENTRE 0 Y 5");
+            return;
         }
         estudiante.setEdad(edad);
         estudiante.setNota(nota);
